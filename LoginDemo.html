@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>LiffLogin</title>
+    <meta charset="UTF-8" />
+  </head>
+
+  <body>
+    <script>
+      // Set document.domain to solve CORS problem
+      document.domain = "SUFFIX_OF_THE_CURRENT_DOMAIN";
+    </script>
+    <button id="login">Login</button>
+    <button id="logout">Logout</button>
+    <div><img id="profileImage" /></div>
+    <textarea id="message" cols="80" rows="10"></textarea>
+    <script src="src/LiffWebSDK.js"></script>
+    <script>
+      const setMessage = liffInfo => {
+        const message =
+          "ID: " +
+          liffInfo.profile.userId +
+          "\n" +
+          "Name: " +
+          liffInfo.profile.displayName +
+          "\n" +
+          "Image URL: " +
+          liffInfo.profile.pictureUrl +
+          "\n" +
+          "Email: " +
+          liffInfo.decodedIDToken.email;
+        document.getElementById("message").value = message;
+      };
+
+      const setProfileImage = srcUrl => {
+        var element = document.getElementById("profileImage");
+        if (srcUrl == null) {
+          element.style.display = "none";
+          element.src = "";
+        } else {
+          element.style.display = "block";
+          element.src = srcUrl;
+        }
+      };
+
+      const liffWeb = new LiffWeb();
+      liffWeb.init("YOUR_LIFF_APP_ID", ["getProfile", "getDecodedIDToken"]);
+      document.getElementById("login").addEventListener("click", () => {
+        window.liffWeb.login(liffInfo => {
+          console.log(liffInfo);
+          setMessage(liffInfo);
+          setProfileImage(liffInfo.profile.pictureUrl);
+        });
+      });
+      document.getElementById("logout").addEventListener("click", () => {
+        window.liffWeb.logout();
+      });
+    </script>
+  </body>
+</html>
