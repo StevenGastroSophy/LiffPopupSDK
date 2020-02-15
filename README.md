@@ -13,13 +13,13 @@ CodeSandbox:
 
 ## Before you get started
 
-###需要準備:
+### 需要準備:
 
 * 一個彈出視窗的**頁面**: Liff v2 SDK**僅**在這一頁引入。
 * 一段開啟彈出視窗的 **JS**: 負責開啟彈出視窗，將接收 **liffInfo**的 function綁到 window上讓**彈出視窗來呼叫**。
 * 一個登入**頁面**: 在這裡執行**開啟彈出視窗的 JS**。
 
-###如何準備:
+### 如何準備:
 
 * 一個彈出視窗的**頁面**: 可以參考 **PopupDemo.html**。
 * 一段開啟彈出視窗的 **JS**: 修改 **LiffWebSDK.js** 裡的 `YOUR_LOGIN_POPUP_LINK`和 `YOUR_LOGOUT_POPUP_LINK`就可以直接使用了。
