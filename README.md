@@ -1,5 +1,5 @@
 # LiffPopupSDK
-Liff login with a popup window
+Liff v2 login with a popup window
 
 把 Liff v2 SDK用一個彈出視窗包起來，就像 Google或 FB的 SDK一樣
 
