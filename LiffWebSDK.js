@@ -7,7 +7,7 @@
  * @example
  * const liffWeb = new LiffWeb();
  * liffWeb.init('your liff id', ['getProfile', 'getDecodedIDToken']);
- * const callback = (liffInfo) => {console.log(liffInfo.decodedIDToken.email);console.log(liffInfo.decodedIDToken.email);}
+ * const callback = (liffInfo) => {console.log(liffInfo.profile.displayName);console.log(liffInfo.decodedIDToken.email);}
  * liffWeb.login(callback);
  */
 
