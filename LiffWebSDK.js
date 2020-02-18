@@ -1,6 +1,6 @@
 /**
  * 把 不會開新視窗的 Liff SDK包成 會開新視窗的 Liff SDK
- * @param {string} liffId - DOM Element Object of the Login button
+ * @param {string} liffId - your LIFF APP ID
  * @param {array} scopeArray - an array of liff api methods as string
  * @param {function} callback - function invoked when login success with userInfo as its parameter
  *
