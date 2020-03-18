@@ -62,9 +62,20 @@ class LiffWeb {
       "Liff",
       this._getWindowSizeString()
     );
+
+    // detect whether the new window is still open every 0.5 second.
+    const checkNewWindow = () => {
+      if (newWindow.closed) {
+        handleUnexpectedClose();
+        clearInterval(timer);
+      }
+    };
+    const timer = setInterval(checkNewWindow, 500);
+
     if (window.focus) newWindow.focus();
     this.setLiffInfo = liffInfo => {
       if (typeof newWindow !== "undefined") {
+        clearInterval(timer);
         callback(liffInfo);
         newWindow.close();
       }

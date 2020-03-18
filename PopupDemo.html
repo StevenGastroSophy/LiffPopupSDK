@@ -1,118 +1,120 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>LiffPopup</title>
-    <meta charset="UTF-8" />
-  </head>
 
-  <body>
-		<div id='success' style='display: none;'>
-			<div><span>You Have Successfully Logged Out</span></div>
-			<button onclick='window.close()'>CLOSE</button>
-		</div>
-		<div id='already' style='display: none;'>
-				<div><span>You Haven't Logged In</span></div>
-				<button onclick='window.close()'>CLOSE</button>
-			</div>
-		<script>
-			// Set document.domain to solve CORS problem
-			document.domain = "SUFFIX_OF_THE_CURRENT_DOMAIN";
-		</script>
-    <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
-		<script>
-			const login = () => {
-				const liff = window.liff;
-				const liffWeb = window.opener.liffWeb;
-				const liffId = liffWeb.liffId;
-				const scopeArray = liffWeb.scopeArray;
+<head>
+	<title>LiffPopup</title>
+	<meta charset="UTF-8" />
+</head>
 
-				liff
-					.init({
-						liffId: liffId
-					})
-					.then(async () => {
-						if (liff.isLoggedIn()) {
-							const getLiffInfo = async scopes => {
-								const info = {
-									errorObject: {}
-								};
-								// Using for-of instead forEach to deal with async loop
-								for (let scope of scopes) {
-									switch (scope) {
-										case "gerOS":
-											info["os"] = liff.getOS();
-											break;
-										case "getLanguage":
-											info["language"] = liff.getLanguage();
-											break;
-										case "getVersion":
-											info["version"] = liff.getVersion();
-											break;
-										case "isInClient":
-											info["isInClient"] = liff.isInClient();
-											break;
-										case "getAccessToken":
-											info["accessToken"] = liff.getAccessToken();
-											break;
-										case "getDecodedIDToken":
-											// liff.getDecodedIDToken() Gets a Promise object containing the ID token payload.
-											// call next iteration after the promise has resolved
-											info["decodedIDToken"] = await liff.getDecodedIDToken();
-											break;
-										case "getProfile":
-											// liff.getProfile() Returns a Promise object that contains the user's profile information.
-											// This method internally calls the Social API using axios.
-											// For error handling, refer to the axios documentation
-											// call next iteration after the promise has resolved
-											info["profile"] = await liff.getProfile();
-											break;
-										default:
-											break;
-									}
-								}
-								// info is a promise
-								return info;
+<body>
+	<div id='success' style='display: none;'>
+		<div><span>You Have Successfully Logged Out</span></div>
+		<button onclick='window.close()'>CLOSE</button>
+	</div>
+	<div id='already' style='display: none;'>
+		<div><span>You Haven't Logged In</span></div>
+		<button onclick='window.close()'>CLOSE</button>
+	</div>
+	<script>
+		// Set document.domain to solve CORS problem
+		document.domain = "SUFFIX_OF_THE_CURRENT_DOMAIN";
+	</script>
+	<script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+	<script>
+		const login = () => {
+			const liff = window.liff;
+			const liffWeb = window.opener.liffWeb;
+			const liffId = liffWeb.liffId;
+			const scopeArray = liffWeb.scopeArray;
+
+			liff
+				.init({
+					liffId: liffId
+				})
+				.then(async () => {
+					if (liff.isLoggedIn()) {
+						const getLiffInfo = async scopes => {
+							const info = {
+								errorObject: {}
 							};
-							const liffInfo = await getLiffInfo(scopeArray);
-							window.opener.liffWeb.setLiffInfo(liffInfo);
-						} else {
-							liff.login();
-						}
-					})
-					.catch(error => {
-						const liffInfo = {
-							errorObject: error
+							// Using for-of instead forEach to deal with async loop
+							for (let scope of scopes) {
+								switch (scope) {
+									case "gerOS":
+										info["os"] = liff.getOS();
+										break;
+									case "getLanguage":
+										info["language"] = liff.getLanguage();
+										break;
+									case "getVersion":
+										info["version"] = liff.getVersion();
+										break;
+									case "isInClient":
+										info["isInClient"] = liff.isInClient();
+										break;
+									case "getAccessToken":
+										info["accessToken"] = liff.getAccessToken();
+										break;
+									case "getDecodedIDToken":
+										// liff.getDecodedIDToken() Gets a Promise object containing the ID token payload.
+										// call next iteration after the promise has resolved
+										info["decodedIDToken"] = await liff.getDecodedIDToken();
+										break;
+									case "getProfile":
+										// liff.getProfile() Returns a Promise object that contains the user's profile information.
+										// This method internally calls the Social API using axios.
+										// For error handling, refer to the axios documentation
+										// call next iteration after the promise has resolved
+										info["profile"] = await liff.getProfile();
+										break;
+									default:
+										break;
+								}
+							}
+							// info is a promise
+							return info;
 						};
-						window.opener.liffWeb.setLiffInfo(liffInfo);
-					});
-			}
+						const liffInfo = await getLiffInfo(scopeArray);
+						liffWeb.setLiffInfo(liffInfo);
+					} else {
+						liff.login();
+					}
+				})
+				.catch(error => {
+					const liffInfo = {
+						errorObject: error
+					};
+					liffWeb.setLiffInfo(liffInfo);
+				});
+		}
 
-			const logout = () => {
-				const liff = window.liff;
-				const liffWeb = window.opener.liffWeb;
-				const liffId = liffWeb.liffId;
+		const logout = () => {
+			const liff = window.liff;
+			const liffWeb = window.opener.liffWeb;
+			const liffId = liffWeb.liffId;
 
-				liff
-					.init({
-						liffId: liffId
-					})
-					.then(async () => {
-						if (liff.isLoggedIn()) {
-							liff.logout();
-							document.getElementById('success').style.display = 'block';
-						} else {
-							document.getElementById('already').style.display = 'block';
-						}
-					});
-			}
+			liff
+				.init({
+					liffId: liffId
+				})
+				.then(async () => {
+					if (liff.isLoggedIn()) {
+						liff.logout();
+						document.getElementById('success').style.display = 'block';
+					} else {
+						document.getElementById('already').style.display = 'block';
+					}
+				});
+		}
 
-			const url = new URL(window.location.href);
-			const params = url.searchParams;
-			if ( params.has('isLogout') && params.get('isLogout') === 'true' ) {
-				logout();
-			} else {
-				login();
-			}
-		</script>
-  </body>
+		const url = new URL(window.location.href);
+		const params = url.searchParams;
+		if (params.has('isLogout') && params.get('isLogout') === 'true') {
+			logout();
+		} else {
+			login();
+		}
+	</script>
+</body>
+
 </html>
