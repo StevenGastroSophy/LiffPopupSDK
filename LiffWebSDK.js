@@ -57,12 +57,24 @@ class LiffWeb {
   }
 
   login(callback = liffInfo => {}) {
+    const handleUnexpectedClose = () => {
+      const liffWeb = window.liffWeb;
+      const liffInfo = {
+        errorObject: {
+          code: 'UNEXPECTED_WINDOW_CLOSE',
+          message: 'window closed unexpectedly.'
+        }
+      };
+      liffWeb.setLiffInfo(liffInfo);
+    };
+
     const newWindow = window.open(
       `YOUR_LOGIN_POPUP_LINK`,
       "Liff",
       this._getWindowSizeString()
     );
 
+    let timer;
     // detect whether the new window is still open every 0.5 second.
     const checkNewWindow = () => {
       if (newWindow.closed) {
@@ -70,7 +82,7 @@ class LiffWeb {
         clearInterval(timer);
       }
     };
-    const timer = setInterval(checkNewWindow, 500);
+    timer = setInterval(checkNewWindow, 500);
 
     if (window.focus) newWindow.focus();
     this.setLiffInfo = liffInfo => {
